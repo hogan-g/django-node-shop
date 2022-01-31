@@ -1,12 +1,37 @@
 {% extends 'base.html' %}
 
-{% block title %} Hello World {% endblock %}
+{% block title %} Spoingus' Emporium {% endblock %}
 
 {% block content %}
-    <p>Hello to the teletubbies:</p>
-    <ul>
-        {% for nm in names%}
-        <li> {{nm}} </li>
-        {% endfor %}
-    </ul>
+    <h1>&emsp; Hello to our wonderful Telletubby Trading Card Customers</h1>
+    <br>
+    <div style="float:left; margin-left: 5%;">
+        <h3>Welcome everyone to Spoingus' Emporium</h3>
+        <p>We first shall begin with a word from our sponsor:</p>
+        <i style="justify-content: left;">
+            According to all known laws
+            of aviation,
+            <br>
+            there is no way a bee
+            should be able to fly.
+            <br>
+            Its wings are too small to get
+            its fat little body off the ground.
+            <br>
+            The bee, of course, flies anyway
+            <br>
+            because bees don't care
+            what humans think is impossible.
+        </i>
+    </div>
+    <div style="float:right; margin-right: 5%;">
+        <ul>
+            {% for p in products%}
+            <li> {{p.name}} - €{{p.price}} - {{p.description}} </li>
+            <a href="/products/{{p.id}}">
+                <img src="{{p.image.url}}" width="108" height="192"/>
+            </a>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

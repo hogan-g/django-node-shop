@@ -18,8 +18,8 @@ class Basket(models.Model):
 
 class BasketItem(models.Model):
     id = models.IntegerField(primary_key=True)
-    basket_id = models.ForeignKey(Basket, on_delete=models.CASCADE)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    basket_id = models.ForeignKey(Basket, on_delete=models.CASCADE, null=True)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField(default = 1)
 
     def price(self):
