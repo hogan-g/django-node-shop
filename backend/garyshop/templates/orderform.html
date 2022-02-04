@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} Spoingus' Emporium {% endblock %}
+
+
+{% block content %}
+
+{% if empty %}
+    <h1>Your Shopping Basket is Empty</h1>
+    <img src="/media/sad.png">
+{% else %}
+    <table>
+        <tbody>
+            {% for item in sbi %}
+                <tr>
+                    <td><img src="{{item.product_id.image.url}}" width="108" height="192"></td>
+                    <td>{{item.product_id.name}} -- {{item.product_id.description}}</td>
+                    <td><u>Quantity</u> : {{item.quantity}}</td>
+                    <td><u>Price</u> : {{item.price}}</td>
+                    <td><a href="/removeitem/{{item.id}}" class="btn btn-primary">Remove</a></td>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>    
+{% endif %}
+<br>
+<form method="POST", action="." style="margin-left: 2%;margin-bottom:2%;">
+    {% csrf_token %}
+    {{form.as_table}}
+    <button type="submit">Order</button>
+</form>
+
+{% endblock %}

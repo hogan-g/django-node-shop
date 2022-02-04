@@ -6,11 +6,11 @@
     <div style="margin-left:25%;">
     <h1>Name: {{product.name}} - €{{product.price}}</h1>
     <p>
-        {{product.description}}
-        <a href="addbasket/{{product.id}}" class="btn btn-primary">Buy €{{product.price}}</a>
+        {{product.description}}<br><br>
+        <a href="/addbasket/{{product.id}}" class="btn btn-primary">Add to Basket</a>
     </p>
     {% if added %}
-    <h2><mark> Added to Basket. </mark></h2>
+    <h2>Added to Basket.</h2>
     {% endif %}
     <br>
     </div>

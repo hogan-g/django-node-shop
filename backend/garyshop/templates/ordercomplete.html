@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Order Complete {% endblock %}
+
+
+{% block content %}
+<h1> Thank you from Spoingus!!!</h1>
+{% if empty %}
+    <h1>Your Shopping Basket is Empty</h1>
+    <img src="/media/sad.png">
+{% else %}
+    <table>
+        <tbody>
+            {% for item in sbi %}
+                <tr>
+                    <td><img src="{{item.product_id.image.url}}" width="108" height="192"></td>
+                    <td>{{item.product_id.name}} -- {{item.product_id.description}}</td>
+                    <td><u>Quantity</u> : {{item.quantity}}</td>
+                    <td><u>Price</u> : {{item.price}}</td>
+                    <td><a href="/removeitem/{{item.id}}" class="btn btn-primary">Remove</a></td>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>    
+{% endif %}
+<br>
+<div style="margin-left: 2%;margin-bottom:2%;">
+    <p>Ship to: {{order.shipping_addr }}</p>
+    <p>Price: {{order.total_price}}</p>
+</div>
+{% endblock %}
