@@ -6,8 +6,10 @@
 {% block content %}
 
 {% if empty %}
+<div style="margin-left: 25%;">
     <h1>Your Shopping Basket is Empty</h1>
-    <img src="/media/sad.png">
+    <img src="/media/sad.png" style="width: 50%;margin-left: 5%;">
+</div>
 {% else %}
     <table>
         <tbody>
@@ -21,11 +23,9 @@
                 </tr>
             {%endfor%}
         </tbody>
-    </table>    
+    </table>   
+    <br>
+    <a href="/order" class="btn btn-primary" style="margin-left: 2%;margin-bottom:2%;"> Order </a>
+    <br> 
 {% endif %}
-<br>
-<a href="/order" class="btn btn-primary" style="margin-left: 2%;margin-bottom:2%;"> Order </a>
-<br>
-
-
 {% endblock %}

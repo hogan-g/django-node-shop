@@ -3,7 +3,8 @@
 {% block title %} {{product.name}} {% endblock %}
 
 {% block content %}
-    <div style="margin-left:25%;">
+    <div style="float:left;width: 40%;margin-left: 10%;">
+    <br><br>
     <h1>Name: {{product.name}} - €{{product.price}}</h1>
     <p>
         {{product.description}}<br><br>
@@ -14,6 +15,9 @@
     {% endif %}
     <br>
     </div>
-    <img src='{{product.image.url}}'style="float:right; width:50%; margin-right:25%;"/>
-    
+    <div style="float:right;width: 50%;">
+        <br><br>
+        <img src='{{product.image.url}}'style="width:30%;margin-left:25%;"/>
+        <br><br><br><br><br>
+    </div>    
 {% endblock %}
