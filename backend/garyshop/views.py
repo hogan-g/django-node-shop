@@ -45,8 +45,9 @@ def logout_user(request):
 def add_to_basket(request, prodid):
     user = request.user
     basket = Basket.objects.filter(user_id=user, is_active=True).first()
-    if not basket:
-        basket = Basket(user_id = user).save()
+    if basket is None:
+        Basket.objects.create(user_id = user)
+        basket = Basket.objects.filter(user_id=user, is_active=True).first()
 
     product = Product.objects.get(id = prodid)
     sbi = BasketItem.objects.filter(basket_id=basket, product_id=product).first()
@@ -114,3 +115,9 @@ def order(request):
     else:
         form = OrderForm()
         return render(request, 'orderform.html', {'form':form, 'basket':basket, 'sbi':sbi})
+
+@login_required
+def previous_orders(request):
+    user = request.user
+    orders = Order.objects.filter(user_id=user)
+    return render(request, 'previous_orders.html',{'orders':orders})
