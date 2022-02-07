@@ -5,6 +5,8 @@ html {
 }
 body {
   background-image: linear-gradient(aqua, #BC70A4);
+  background-size: cover;
+  min-height: 100%;
 }
 .nav-link{
   color:green;

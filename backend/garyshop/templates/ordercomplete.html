@@ -4,7 +4,6 @@
 
 
 {% block content %}
-<h1> Thank you from Spoingus!!!</h1>
 {% if empty %}
     <h1>Your Shopping Basket is Empty</h1>
     <img src="/media/sad.png">
@@ -24,8 +23,12 @@
     </table>    
 {% endif %}
 <br>
-<div style="margin-left: 2%;margin-bottom:2%;">
+<img src="/media/thankbee.gif" style="float:right;margin-right: 15%;width: 20%;">
+<div style="margin-left: 2%;margin-bottom:2%;margin-right: 50%; background-color:yellow;padding: 10px;">
+    <h1 style="float: left;"> Thank you from Spoingus!!!</h1><br><br><br>
     <p>Ship to: {{order.shipping_addr }}</p>
     <p>Price: {{order.total_price}}</p>
 </div>
+<br><br><br><br><br><br><br><br>
+<h1 style="color: transparent;" >congrats u found easter egg, now ignore it</h1>
 {% endblock %}
