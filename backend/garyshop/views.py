@@ -1,5 +1,6 @@
 from re import template
 import re
+from django import views
 from django.shortcuts import render
 from django.views.generic import CreateView
 from django.contrib.auth import login, logout
@@ -8,12 +9,14 @@ from .models import *
 from .forms import *
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets
+from .serializers import *
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+
+
 
 # Create your views here.
 def index(request):
-    # get the request in
-    # do some logic with models in database
-    # return a webpage to the user
     products = Product.objects.all()
     return render(request, 'index.html', {'products':products })
 
@@ -121,3 +124,41 @@ def previous_orders(request):
     user = request.user
     orders = Order.objects.filter(user_id=user)
     return render(request, 'previous_orders.html',{'orders':orders})
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class BasketViewSet(viewsets.ModelViewSet):
+  serializer_class = BasketSerializer
+  queryset = Basket.objects.all()
+  permission_classes = [IsAuthenticated]
+
+  def get_queryset(self):
+      user = self.request.user # get the current user
+      if user.is_superuser:
+          return Basket.objects.all() # return all the baskets if a superuser requests
+      else:
+          # For normal users, only return the current active basket
+          shopping_basket = Basket.objects.filter(user_id=user, is_active=True)
+          return shopping_basket
+
+class OrderViewSet(viewsets.ModelViewSet):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user # get the current user
+        if user.is_superuser:
+            return Order.objects.all() # return all the baskets if a superuser requests
+        else:
+            # For normal users, only return the current active basket
+            orders = Order.objects.filter(user_id=user)
+            return orders
+
+class APIUserViewSet(viewsets.ModelViewSet):
+    queryset = API_user.objects.all()
+    serializer_class = APIUserSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
