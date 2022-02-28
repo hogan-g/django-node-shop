@@ -25,5 +25,9 @@ urlpatterns = [
     path('removeitem/<int:sbi>', views.remove_item, name="remove_item"),
     path('order/', views.order, name="order"),
     path('orderhistory/', views.previous_orders, name="order_history"),
+    path('apiregister/', views.UserRegistrationAPIView.as_view(), name="api_register"),
+    path('apiadd/', views.AddBasketItemAPIView.as_view(), name="api_add_to_basket"),
+    path('apiremove/', views.RemoveBasketItemAPIView.as_view(), name="api_remove_from_basket"),
+    path('apicheckout/', views.CheckoutAPIView.as_view(), name="api_checkout"),
     path('api/', include(router.urls)),
 ]
