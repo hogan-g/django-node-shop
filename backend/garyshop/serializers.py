@@ -57,6 +57,9 @@ class AddBasketItemSerializer(serializers.ModelSerializer):
         if request:
             current_user = request.user
             shopping_basket = Basket.objects.filter(user_id=current_user, is_active=True).first()
+            if shopping_basket is None:
+                Basket.objects.create(user_id = current_user)
+                shopping_basket = Basket.objects.filter(user_id=current_user, is_active=True).first()
             # Check if the item is already in the basket
             basket_items = BasketItem.objects.filter(product_id=product_id, basket_id=shopping_basket).first()
             if basket_items:
