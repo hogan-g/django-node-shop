@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
+        <h1><%= title %></h1>
+        <p>Welcome to <%= title %></p>
+        <button><a href='http://localhost:3000/login'>Login</a></button>
+        <h3>Products:</h3>
+        <ol id="product-list">
+
+        </ol>
+        <script>
+            let list = document.getElementById("product-list");
+            let req = "http://127.0.0.1:8000/api/products/"
+            fetch(req) // make a request to this endpoint
+				.then(response => response.json()) // with our response, get the json data returned
+                .then(data => data.forEach(element => {
+                let productname = element.name // get the pokemon name 
+                let newListelement = document.createElement("li")// create an li element 
+                newListelement.innerHTML = productname
+                list.appendChild(newListelement);
+            }));
+        </script>
+    </body>
+</html>
