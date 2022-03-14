@@ -7,21 +7,45 @@
     <body>
         <h1><%= title %></h1>
         <p>Welcome to <%= title %></p>
-        <button><a href='http://localhost:3000/login'>Login</a></button>
+        <a id="auth-link" href='/login'>Login</a>
         <h3>Products:</h3>
-        <ol id="product-list">
+        <ul id="product-list">
 
-        </ol>
+        </ul>
         <script>
+            window.userLoggedIn = false;
+
+            function isLoggedIn(){
+                let accessToken = localStorage.getItem("accessToken");
+                if(accessToken != null || typeof(accessToken) != "undefined"){
+                    window.userLoggedIn = true;
+                }
+
+                if(window.userLoggedIn){
+                    let loginLink = document.getElementById("auth-link");
+                    loginLink.innerHTML = "Logout";
+                    loginLink.href = "#";
+                }
+            }
+            
+            document.body.onLoad = isLoggedIn();
+
             let list = document.getElementById("product-list");
             let req = "http://127.0.0.1:8000/api/products/"
             fetch(req) // make a request to this endpoint
 				.then(response => response.json()) // with our response, get the json data returned
                 .then(data => data.forEach(element => {
-                let productname = element.name // get the pokemon name 
+                console.log(element)
+                let productname = element.name
                 let newListelement = document.createElement("li")// create an li element 
+                let link = document.createElement("a")
+                link.innerHTML = element['name']
+
+                let productStr = "/products?id=" + element['id']
+                link.href = productStr
+                
                 newListelement.innerHTML = productname
-                list.appendChild(newListelement);
+                list.appendChild(link);
             }));
         </script>
     </body>
