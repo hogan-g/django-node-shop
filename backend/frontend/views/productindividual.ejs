@@ -1,0 +1,81 @@
+<%- include('header') -%>
+        <div id="the-box"></div>
+
+        </div>
+    </body>
+    <script>
+
+        function displayProduct(name, desc, price, image, productID){
+            let n = document.createElement("h1");
+            let d = document.createElement("p");
+            let p = document.createElement("h3");
+            let i = document.createElement("img");
+            n.innerHTML = name;
+            d.innerHTML = "Description: <br>" + desc;
+            p.innerHTML = "Price: " + price;
+            i.src = image;
+            i.setAttribute("style", "width: 50%; margin-top:20px;");
+
+            let addToCart = document.createElement("button"); // create a button
+            addToCart.innerHTML = "Add to cart"; // set the text of the button 
+            addToCart.onclick = ()=>{
+            // code for when the button is clicked
+                fetch('http://127.0.0.1:8000/apiadd/', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+localStorage.getItem("access")
+                    },
+                    body: JSON.stringify({
+                        "product_id": parseInt(productID)
+                    })
+                })
+                .then(response=>response.json())
+                .then(data=>{
+                        // display an add to cart success message
+                        console.log(data)
+                    });
+                }
+
+            document.getElementById("the-box").appendChild(n)
+            document.getElementById("the-box").appendChild(d)
+            document.getElementById("the-box").appendChild(p)
+            document.getElementById("the-box").appendChild(addToCart)
+            document.getElementById("the-box").appendChild(i)
+        }
+        
+        function whichProduct(){
+            let params = window.location.search;
+            let urlParams = new URLSearchParams(params);
+            let productID = urlParams.get("id");
+            // http://127.0.0.1:8000/api/products/id 
+            if(productID != null && typeof(productID)!= 'undefined'){
+                fetch('http://127.0.0.1:8000/api/products/'+productID)
+                .then(resp => resp.json())
+                .then(data => {
+                    console.log(data);
+                    if('detail' in data){
+                        // display some generic product not found error
+                        alert("Product Not Found");
+                    }
+                    else{
+                        let name = data['name'];
+                        let desc = data['description'];
+                        let price = data['price'];
+                        let image= data['image'];
+                        // display the product data  
+                        displayProduct(name, desc, price, image, productID);   
+                        
+                    }
+                });
+                
+            }
+        }   
+        window.onload = function(){
+            isLoggedIn(); // when the page loads call isLoggedIn
+            whichProduct();
+        }
+
+</script>
+<%- include('footer') -%>

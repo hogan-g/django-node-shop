@@ -1,0 +1,28 @@
+<%- include('header') -%>
+        <h1>Default</h1>
+        <ul id = "main-cont">
+
+        </ul>
+    </body>
+    <script>
+        let params = window.location.search;
+        let urlParams = new URLSearchParams(params);
+        let productID = urlParams.get("id");
+
+        if(productID != null && typeof(productID) != "undefined"){
+            fetch('http://127.0.0.1:8000/api/products/'+productID)
+            .then(resp => resp.json())
+            .then(data => {
+                if('detail' in data){
+                    alert("Product Not Found");
+                }
+                else{
+                    let name = data['name']
+                    let desc = data['description']
+                    let price = data['price']
+                    let image = data['image']
+                }
+            });
+        }
+    </script>
+<%- include('footer') -%>
