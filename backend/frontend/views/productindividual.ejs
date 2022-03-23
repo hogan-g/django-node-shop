@@ -10,14 +10,17 @@
             let d = document.createElement("p");
             let p = document.createElement("h3");
             let i = document.createElement("img");
+            
             n.innerHTML = name;
             d.innerHTML = "Description: <br>" + desc;
             p.innerHTML = "Price: " + price;
             i.src = image;
             i.setAttribute("style", "width: 50%; margin-top:20px;");
-
+            
             let addToCart = document.createElement("button"); // create a button
-            addToCart.innerHTML = "Add to cart"; // set the text of the button 
+            addToCart.innerHTML = "Add to basket"; // set the text of the button 
+            addToCart.style.marginLeft = '10px';
+            addToCart.id = "cart_button";
             addToCart.onclick = ()=>{
             // code for when the button is clicked
                 fetch('http://127.0.0.1:8000/apiadd/', {
@@ -33,15 +36,20 @@
                 })
                 .then(response=>response.json())
                 .then(data=>{
-                        // display an add to cart success message
-                        console.log(data)
+                        //Display added to basket success
+                        let button = document.getElementById("cart_button")
+                        button.setAttribute("popover-top", "Added one to your basket");
+                        setTimeout(() => {  button.removeAttribute("popover-top"); }, 2000);
+
                     });
                 }
 
             document.getElementById("the-box").appendChild(n)
             document.getElementById("the-box").appendChild(d)
             document.getElementById("the-box").appendChild(p)
-            document.getElementById("the-box").appendChild(addToCart)
+            if(window.userLoggedIn == true){
+                document.getElementById("the-box").appendChild(addToCart)
+            }
             document.getElementById("the-box").appendChild(i)
         }
         
@@ -72,6 +80,7 @@
                 
             }
         }   
+
         window.onload = function(){
             isLoggedIn(); // when the page loads call isLoggedIn
             whichProduct();

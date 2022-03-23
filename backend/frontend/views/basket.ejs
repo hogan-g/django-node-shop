@@ -1,11 +1,107 @@
 <%- include('header') -%>
+    <h2>Your Basket
+    <button class="btn-large btn-primary" style="margin-left: 2%;margin-bottom:2%; float:right;"> Order </button>
+    </h2>
+    <div id="the-box">
 
-<!-- html and <script> tags specific to a page go here -->
-
+    </div>
 
     <script>
+        function displayProduct(name, quantity, price, productID){
+            //let box = document.getElementById("the-box")
+            //box.innerHTML += "<h2>HELLO BINGUS</h2>"
+            let card_outer = document.createElement("div")
+            card_outer.classList.add("card")
+            card_outer.style.width = "20rem"
+            let card = document.createElement("div")
+            card.classList.add("card-body")
+
+            let n = document.createElement("h3");
+            let q = document.createElement("p");
+            let p = document.createElement("p");
+
+            n.innerHTML = name;
+            q.innerHTML = "Quantity: <br>" + quantity;
+            p.innerHTML = "Price: " + price;
+
+            let removeFromCart = document.createElement("button"); // create a button
+            removeFromCart.innerHTML = "Remove"; // set the text of the button 
+            removeFromCart.id = "cart_button";
+            removeFromCart.onclick = ()=>{
+            // code for when the button is clicked
+                fetch('http://127.0.0.1:8000/apiremove/', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem("access")
+                    },
+                    body: JSON.stringify({
+                        "product_id": parseInt(productID)
+                    })
+                })
+                .then(response=>response.json())
+                .then(data=>{
+                        window.location.reload()
+                    });
+                }
+            
+            let the_box = document.getElementById("the-box")
+            the_box.appendChild(card_outer)
+            card_outer.appendChild(card)
+            card.appendChild(n)
+            card.appendChild(q)
+            card.appendChild(p)
+            card.appendChild(removeFromCart)
+
+        }
+        function buildPage()
+        {
+            let token = localStorage.getItem("access");
+            if(token == null){
+                window.location = "/login";
+            }
+            fetch('http://127.0.0.1:8000/api/basket/', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(resp => resp.json())
+                .then(data => {
+                    let basket = data[0];
+                    let basket_id = basket["id"];
+                    let items = basket["items"];
+
+                    items.forEach(element => {
+                        let id = element['product_id']
+                        let quantity = element['quantity']
+                        let price = element['price']
+                        
+                        fetch('http://127.0.0.1:8000/api/products/' + id)
+                        .then(resp => resp.json())
+                        .then(data => {
+                            console.log(data);
+                            if('detail' in data){
+                                // display some generic product not found error
+                                alert("Product Not Found");
+                            }
+                            else{
+                                let name = data['name'];
+                                let image_url = data['image'];
+                                let desc = data['description'];
+                                // display the product data  
+                                displayProduct(name, quantity, price, id);   
+                                
+                            }
+                        })
+                    });
+                })   
+        } 
         window.onload = function(){
             isLoggedIn(); // when the page loads call isLoggedIn
+            buildPage();
         }
     </script>
 <%- include('footer') -%>

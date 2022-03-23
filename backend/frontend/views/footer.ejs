@@ -6,27 +6,25 @@
 
             let accessToken = localStorage.getItem("access");        
 
-            if(accessToken != null && accessToken != "null" && typeof(accessToken)!='undefined'){
+            if(accessToken != null && typeof(accessToken)!='undefined'){
                 // if there is an access token in localstorage
                 window.userLoggedIn = true;
             }
 
             if(window.userLoggedIn == true){
-                console.log("setting logout")
                 let loginLink = document.getElementById("auth-link");
                 loginLink.innerHTML = "Logout";
                 loginLink.href = "/logout";
             }   
             else if(window.userLoggedIn == false){
-                console.log("setting login")
                 let loginLink = document.getElementById("auth-link");
                 loginLink.innerHTML = "Login";
                 loginLink.href = "/login";
             } 
         }
         function logOut(){
-            localStorage.setItem("access", null);
-            localStorage.setItem("refresh", null);
+            localStorage.removeItem("access", null);
+            localStorage.removeItem("refresh", null);
             window.location.href = "/";
         }
     </script>

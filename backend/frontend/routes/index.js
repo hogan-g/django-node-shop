@@ -18,10 +18,6 @@ router.get('/basket', function(req, res, next){
   res.render('basket')
 });
 
-router.get('/checkout', function(req, res, next){
-  res.render('products')
-});
-
 router.get('/order', function(req, res, next){
   res.render('order')
 });
@@ -30,5 +26,8 @@ router.get('/productindividual', function(req, res, next){
   res.render('productindividual')
 });
 
+router.get('/register', function(req, res, next){
+  res.render('register')
+});
 
 module.exports = router;
