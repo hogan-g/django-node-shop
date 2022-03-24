@@ -1,9 +1,53 @@
 <%- include('header') -%>
 
-<!-- html and <script> tags specific to a page go here -->
-
-
+    <h2>Please Enter The Shipping Address</h2>
+    <form id="order-form">
+        <div id="wrapper" class="alert alert-primary dismissible">
+            <label for="address-input">Shipping Address</label>
+            <input style="width: 70%;"type="text" name="address-input" id="address" placeholder="Your address" required>
+            <br>
+            <button type="submit">Submit</button>
+        </div>
+        <h4 style="color:green;" id="done"></h4>
+    </form>
     <script>
+        function formValidator(event){
+            event.preventDefault(); // always prevent default events when using javascript
+
+            let address = document.getElementById("address").value;
+            if( address == ""){
+                alert("Address cannot be empty");
+            }
+            else{
+                fetch('http://127.0.0.1:8000/api/basket/', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem("access")
+                    },
+                })
+                .then(response=>response.json())
+                .then(data=>{
+                    let basket = data[0];
+                    let basket_id = basket["id"];
+                    fetch("http://127.0.0.1:8000/apicheckout/", { 
+                        method: 'POST', 
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem("access")
+                        },
+                        body: JSON.stringify({basket_id: basket_id, shipping_addr: address})
+                        }).then(response=>response.json())
+                        .then(data=>{
+                            document.getElementById("done").innerHTML = "Order Placed, Thank You!"
+                            window.setTimeout(() => {window.location.href = "/";}, 3000);
+                        });
+                    }); 
+            }
+        }
+        let myform = document.getElementById("order-form"); // get the form 
+        myform.addEventListener('submit', formValidator); // bind the validator function to the submit button for the form   
         window.onload = function(){
             isLoggedIn(); // when the page loads call isLoggedIn
         }

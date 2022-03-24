@@ -1,24 +1,30 @@
 <%- include('header') -%>
-    <h2>Your Basket
-    <button class="btn-large btn-primary" style="margin-left: 2%;margin-bottom:2%; float:right;"> Order </button>
+    <h2><span style="text-decoration:underline;">Your Basket</span>
+    <button id="orderButton" class="btn-large btn-primary" style="margin-left: 2%;margin-bottom:2%; float:right;"><a href="/order"> Order </a></button>
     </h2>
+    <h3 id="Notification"></h3>
     <div id="the-box">
 
     </div>
 
     <script>
-        function displayProduct(name, quantity, price, productID){
+        function displayProduct(name, quantity, price, productID, image_url){
             //let box = document.getElementById("the-box")
             //box.innerHTML += "<h2>HELLO BINGUS</h2>"
             let card_outer = document.createElement("div")
             card_outer.classList.add("card")
             card_outer.style.width = "20rem"
+            card_outer.style.display = "inline-block"
+            card_outer.style.margin = "10px"
             let card = document.createElement("div")
             card.classList.add("card-body")
 
             let n = document.createElement("h3");
             let q = document.createElement("p");
             let p = document.createElement("p");
+            let prodImg = document.createElement("img");
+
+            prodImg.src = image_url;
 
             n.innerHTML = name;
             q.innerHTML = "Quantity: <br>" + quantity;
@@ -49,6 +55,7 @@
             let the_box = document.getElementById("the-box")
             the_box.appendChild(card_outer)
             card_outer.appendChild(card)
+            card_outer.appendChild(prodImg)
             card.appendChild(n)
             card.appendChild(q)
             card.appendChild(p)
@@ -74,29 +81,38 @@
                     let basket_id = basket["id"];
                     let items = basket["items"];
 
-                    items.forEach(element => {
-                        let id = element['product_id']
-                        let quantity = element['quantity']
-                        let price = element['price']
-                        
-                        fetch('http://127.0.0.1:8000/api/products/' + id)
-                        .then(resp => resp.json())
-                        .then(data => {
-                            console.log(data);
-                            if('detail' in data){
-                                // display some generic product not found error
-                                alert("Product Not Found");
-                            }
-                            else{
-                                let name = data['name'];
-                                let image_url = data['image'];
-                                let desc = data['description'];
-                                // display the product data  
-                                displayProduct(name, quantity, price, id);   
-                                
-                            }
-                        })
-                    });
+                    if(items.length == 0)
+                    {
+                        let Notification = document.getElementById("Notification")
+                        Notification.innerHTML = "Your Basket is Empty :("
+                        let button = document.getElementById("orderButton")
+                        button.style.visibility = "hidden"
+                    }
+                    else{
+                        items.forEach(element => {
+                            let id = element['product_id']
+                            let quantity = element['quantity']
+                            let price = element['price']
+                            
+                            fetch('http://127.0.0.1:8000/api/products/' + id)
+                            .then(resp => resp.json())
+                            .then(data => {
+                                console.log(data);
+                                if('detail' in data){
+                                    // display some generic product not found error
+                                    alert("Product Not Found");
+                                }
+                                else{
+                                    let name = data['name'];
+                                    let image_url = data['image'];
+                                    let desc = data['description'];
+                                    // display the product data  
+                                    displayProduct(name, quantity, price, id, image_url);   
+                                    
+                                }
+                            })
+                        });
+                    }
                 })   
         } 
         window.onload = function(){
