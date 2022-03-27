@@ -1,6 +1,6 @@
 <%- include('header') -%>
     <h2><span style="text-decoration:underline;">Your Basket</span>
-    <button id="orderButton" class="btn-large btn-primary" style="margin-left: 2%;margin-bottom:2%; float:right;"><a href="/order"> Order </a></button>
+    <a id="orderButton" style="margin-left: 2%;margin-bottom:2%; float:right; visibility: hidden;" class="paper-btn btn-large btn-primary" href="/order"> Order </a>
     </h2>
     <h3 id="Notification"></h3>
     <div id="the-box">
@@ -19,7 +19,7 @@
             let card = document.createElement("div")
             card.classList.add("card-body")
 
-            let n = document.createElement("h3");
+            let n = document.createElement("h4");
             let q = document.createElement("p");
             let p = document.createElement("p");
             let prodImg = document.createElement("img");
@@ -27,7 +27,7 @@
             prodImg.src = image_url;
 
             n.innerHTML = name;
-            q.innerHTML = "Quantity: <br>" + quantity;
+            q.innerHTML = "Quantity: " + quantity;
             p.innerHTML = "Price: " + price;
 
             let removeFromCart = document.createElement("button"); // create a button
@@ -85,10 +85,11 @@
                     {
                         let Notification = document.getElementById("Notification")
                         Notification.innerHTML = "Your Basket is Empty :("
-                        let button = document.getElementById("orderButton")
-                        button.style.visibility = "hidden"
                     }
                     else{
+                        let button = document.getElementById("orderButton")
+                        button.style.visibility = "visible"
+
                         items.forEach(element => {
                             let id = element['product_id']
                             let quantity = element['quantity']

@@ -1,0 +1,73 @@
+<%- include('header') -%>
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Ordered On</th>
+            <th>Address</th>
+            <th>Total Price</th>
+        </tr>
+    </thead>
+    <tbody id="the-table">
+
+    </tbody>
+</table>
+
+<script>
+    let token = localStorage.getItem("access");
+        if(token == null){
+            window.location = "/login";
+        }
+    
+    function constructRow(element){
+        let table = document.getElementById("the-table")
+
+        let id = element['id']
+        let time = element['datetime_ordered']
+        let address = element['shipping_addr']
+        let price = element['total_price']
+        
+        let row = document.createElement("tr")
+
+        let rid = document.createElement("td")
+        rid.innerHTML = id
+        let rtime = document.createElement("td")
+        date = new Date(time);
+        rtime.innerHTML = date.toUTCString()
+        let raddr = document.createElement("td")
+        raddr.innerHTML = address
+        let rprice = document.createElement("td")
+        rprice.innerHTML = "€ " + price
+
+        row.appendChild(rid)
+        row.appendChild(rtime)
+        row.appendChild(raddr)
+        row.appendChild(rprice)
+
+        table.appendChild(row)
+    }
+
+    function getOrders(){
+        fetch('http://127.0.0.1:8000/api/orders/', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(resp => resp.json())
+                .then(data => {
+                    // data is an array of arrays, each in the data array array is an order
+                    data.forEach(element => {
+                        constructRow(element)
+                    });
+                })
+    }
+    
+
+    window.onload = function(){
+        isLoggedIn(); // when the page loads call isLoggedIn
+        getOrders();
+    }
+</script>
+<%- include('footer') -%>
