@@ -1,6 +1,7 @@
 body {
   padding: 50px;
 }
-a {
-  text-decoration: none;
+html {
+  background-image: url("/images/background.jpg");
+  background-size: cover;
 }

@@ -1,29 +1,88 @@
 <%- include('header') -%>
-        <p>Welcome to <%= title %></p>
-        <h3>Products:</h3>
-        <ul id="product-list">
+        <h2>Welcome to <%= title %></h2>
+        <h4>Hello to our wonderful trading card customers, please explore the shop, have a look around!</h4>
+        <div id="the-box">
 
-        </ul>
+        </div>
+
         <script>
-            fetch("http://127.0.0.1:8000/api/products")
-            .then(resp => resp.json())
-            .then(data => {
-                data.forEach(element => {
-                    // create a li element for each 
-                    console.log(element);
-                    let tmpLi = document.createElement("li");
-                    let link = document.createElement("a");
-                    link.innerHTML = element['name']; // <a>Bread</a>
-                    // /products?id=x
-                    let productStr = "/productindividual?id=" + element['id'];
-                    tmpLi.appendChild(link);
-                    console.log(productStr);
-                    link.href = productStr;
-                    document.getElementById("product-list").appendChild(tmpLi)
-                });
-            })
+            function constructCard(element){
+                let tile = document.createElement("div")
+                tile.classList.add("card")
+                tile.style.display = "inline-block"
+                tile.style.margin = "10px"
+
+                let content = document.createElement("div")
+                content.classList.add("card-body")
+                content.style.width = "60%"
+                content.style.display = "inline-block"
+
+                let imgdiv = document.createElement("div")
+                imgdiv.classList.add("card-body")
+                imgdiv.style.width = "40%"
+                imgdiv.style.float = "right" 
+                
+                let name = element['name']
+                let desc = element['description']
+                let imgurl = element['image']
+                
+                tile.appendChild(content)
+
+                let title = document.createElement("h4")
+                title.classList.add("card-title")
+                title.innerHTML = name
+                content.appendChild(title)
+
+                let description = document.createElement("p")
+                description.classList.add("card-text")
+                description.innerHTML = desc
+                content.appendChild(description)
+
+                let link = document.createElement("a")
+                link.classList.add("paper-btn")
+                link.innerHTML = "View Item"
+                let productStr = "/productindividual?id=" + element['id'];
+                link.href = productStr;
+                content.appendChild(link)
+
+                
+                tile.appendChild(imgdiv)
+                let image = document.createElement("img")
+                image.src = imgurl
+                image.style = "width:50%;"
+                imgdiv.appendChild(image)
+
+                let box = document.getElementById("the-box")
+                box.appendChild(tile)
+            }
+            function getProducts(){
+                fetch("http://127.0.0.1:8000/api/products")
+                .then(resp => resp.json())
+                .then(data => {
+                    data.forEach(element => {
+                        console.log(element)
+                        constructCard(element)
+                        
+                        
+                        
+                        // create a li element for each 
+                        /* console.log(element);
+                        let tmpLi = document.createElement("li");
+                        let link = document.createElement("a");
+                        link.innerHTML = element['name']; // <a>Bread</a>
+                        // /products?id=x
+                        let productStr = "/productindividual?id=" + element['id'];
+                        tmpLi.appendChild(link);
+                        console.log(productStr);
+                        link.href = productStr;
+                        document.getElementById("product-list").appendChild(tmpLi) */
+                    });
+                })
+            }
+            
         
         window.onload = function(){
+            getProducts()
             isLoggedIn(); // when the page loads call isLoggedIn
         }
         </script>
