@@ -19,10 +19,10 @@
             let card = document.createElement("div")
             card.classList.add("card-body")
 
-            let n = document.createElement("h4");
-            let q = document.createElement("p");
-            let p = document.createElement("p");
-            let prodImg = document.createElement("img");
+            let n = document.createElement("h4")
+            let q = document.createElement("p")
+            let p = document.createElement("p")
+            let prodImg = document.createElement("img")
 
             prodImg.src = image_url;
 
@@ -32,7 +32,6 @@
 
             let removeFromCart = document.createElement("button"); // create a button
             removeFromCart.innerHTML = "Remove"; // set the text of the button 
-            removeFromCart.id = "cart_button";
             removeFromCart.onclick = ()=>{
             // code for when the button is clicked
                 fetch('http://127.0.0.1:8000/apiremove/', {
@@ -80,6 +79,7 @@
                     let basket = data[0];
                     let basket_id = basket["id"];
                     let items = basket["items"];
+                    console.log(data);
 
                     if(items.length == 0)
                     {
@@ -98,7 +98,6 @@
                             fetch('http://127.0.0.1:8000/api/products/' + id)
                             .then(resp => resp.json())
                             .then(data => {
-                                console.log(data);
                                 if('detail' in data){
                                     // display some generic product not found error
                                     alert("Product Not Found");
