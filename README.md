@@ -1,3 +1,3 @@
-# 2022 Ca298 Template
+# Gary's Shop
 
-Template repo for Ca298
+This is a project completed for my Full Stack Development Module, in this module, we learned about using frameworks such as Django and Node to construct a fully functional and reactive website. For my project I made a fictional trading card website.
